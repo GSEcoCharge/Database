@@ -5,6 +5,10 @@
 
 Este documento apresenta o modelo conceitual do banco de dados do projeto **EcoCharge**. O banco de dados foi projetado para armazenar informações sobre usuários, veículos elétricos, postos de carregamento, reservas, histórico de carregamentos, avaliações e viagens planejadas para ser utilizado em um aplicativo de carregamento de veículos elétricos.
 
+## 🌐 Documentação Online
+
+[DbDocs](https://dbdocs.io/gutocebola/EcoCharge)
+
 ## 📐 Modelo Conceitual
 
 ### 1. **Usuario**
