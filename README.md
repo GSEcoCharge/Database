@@ -6,10 +6,11 @@
             <li><a href="#introdução">Introdução</a></li>
             <li><a href="#documentação-online">Documentação Online</a></li>
             <li><a href="#modelo-conceitual">Modelo Conceitual</a></li>
+            <li><a href="#requisitos">Requisitos do Projeto de Banco de Dados</a></li>
+            <li><a href="#entregaveis">Entregáveis</a></li>
         </ol>
     </summary>
 </details>
-
 
 <h2 id="introdução">📘 Introdução</h2>
 
@@ -130,7 +131,7 @@ Este documento apresenta o modelo conceitual do banco de dados do projeto **EcoC
   - `ponto_id` (FK): ID do ponto de carregamento sugerido como parada.
   - `ordem`: Ordem do ponto de parada na viagem.
 
-## 📋 Requisitos do Projeto de Banco de Dados
+<h2 id="requisitos">📋 Requisitos do Projeto de Banco de Dados</h2>
 
 - Modelagem de Banco de Dados Relacional (30 Pontos)
 
@@ -172,7 +173,7 @@ Este documento apresenta o modelo conceitual do banco de dados do projeto **EcoC
     - [ ] A inserção dos dados no banco relacional.
     - [ ] A exportação do dataset para JSON e sua importação no MongoDB.
 
-## 📦 Entregáveis
+<h2 id="entregaveis">📦 Entregáveis</h2>
 
 - [ ] **Modelos Lógico e Físico** do banco de dados relacional (formato `.pdf`).
 - [ ] **Procedures e funções personalizadas** com tratamento de exceções (formato `.sql`).
