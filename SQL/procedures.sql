@@ -71,11 +71,11 @@ CREATE OR REPLACE PROCEDURE insert_gs_historico_carregamento (
     p_usuario_id IN NUMBER,
     p_ponto_id IN NUMBER,
     p_energia_consumida IN NUMBER DEFAULT NULL,
-    p_emissoes_evitas IN NUMBER DEFAULT NULL
+    p_EMISSOES_EVITADAS IN NUMBER DEFAULT NULL
 ) AS
 BEGIN
-    INSERT INTO GS_HISTORICO_CARREGAMENTO (USUARIO_ID, PONTO_ID, ENERGIA_CONSUMIDA, EMISSOES_EVITAS)
-    VALUES (p_usuario_id, p_ponto_id, p_energia_consumida, p_emissoes_evitas);
+    INSERT INTO GS_HISTORICO_CARREGAMENTO (USUARIO_ID, PONTO_ID, ENERGIA_CONSUMIDA, EMISSOES_EVITADAS)
+    VALUES (p_usuario_id, p_ponto_id, p_energia_consumida, p_EMISSOES_EVITADAS);
 END;
 /
 
