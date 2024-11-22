@@ -41,12 +41,12 @@ CREATE TABLE GS_VEICULO(
 CREATE TABLE GS_POSTO_CARREGAMENTO(
     posto_id INT PRIMARY KEY,
     nome VARCHAR(100),
-    latitude NUMBER(10,6),
-    longitude NUMBER(10,6),
+    latitude DECIMAL(10,6),
+    longitude DECIMAL(10,6),
     endereco VARCHAR(200),
     horario_funcionamento VARCHAR(100),
     formas_pagamento VARCHAR (100),
-    avaliacao_media NUMBER(3,2)
+    avaliacao_media DECIMAL(3,2)
 );
 
 CREATE TABLE GS_AVALIACAO(
@@ -274,13 +274,13 @@ CREATE OR REPLACE TRIGGER trg_usuario
 AFTER INSERT OR UPDATE OR DELETE ON gs_usuario
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_USUARIO (operacao, usuario, usuario_id, nome_novo, email_novo, senha_nova, img_perfil_novo, data_criacao, ultima_localizacao)
         VALUES ('INSERT', USER, :NEW.usuario_id, :NEW.nome, :NEW.email, :NEW.senha, :NEW.img_perfil, :NEW.data_criacao, :NEW.ultima_localizacao);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_USUARIO (operacao, usuario, usuario_id, nome_antigo, nome_novo, email_antigo, email_novo, senha_antiga, senha_nova, img_perfil_antigo, img_perfil_novo, data_criacao, ultima_localizacao)
         VALUES ('UPDATE', USER, :OLD.usuario_id, :OLD.nome, :NEW.nome, :OLD.email, :NEW.email, :OLD.senha, :NEW.senha, :OLD.img_perfil, :NEW.img_perfil, :NEW.data_criacao,:NEW.ultima_localizacao);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_USUARIO (operacao, usuario, usuario_id, nome_antigo, email_antigo, senha_antiga, img_perfil_antigo, data_criacao, ultima_localizacao)
         VALUES ('DELETE', USER, :OLD.usuario_id, :OLD.nome, :OLD.email, :OLD.senha, :OLD.img_perfil, :OLD.data_criacao, :OLD.ultima_localizacao);
     END IF;
@@ -291,13 +291,13 @@ CREATE OR REPLACE TRIGGER trg_veiculo
 AFTER INSERT OR UPDATE OR DELETE ON GS_VEICULO
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_VEICULO (operacao, usuario, veiculo_id, marca_nova, modelo_novo, ano_novo, autonomia_nova, tipo_conector_novo, usuario_id_novo)
         VALUES ('INSERT', USER, :NEW.veiculo_id, :NEW.marca, :NEW.modelo, :NEW.ano, :NEW.autonomia, :NEW.tipo_conector, :NEW.usuario_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_VEICULO (operacao, usuario, veiculo_id, marca_antiga, marca_nova, modelo_antigo, modelo_novo, ano_antigo, ano_novo, autonomia_antiga, autonomia_nova, tipo_conector_antigo, tipo_conector_novo, usuario_id_antigo, usuario_id_novo)
         VALUES ('UPDATE', USER, :OLD.veiculo_id, :OLD.marca, :NEW.marca, :OLD.modelo, :NEW.modelo, :OLD.ano, :NEW.ano, :OLD.autonomia, :NEW.autonomia, :OLD.tipo_conector, :NEW.tipo_conector, :OLD.usuario_id, :NEW.usuario_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_VEICULO (operacao, usuario, veiculo_id, marca_antiga, modelo_antigo, ano_antigo, autonomia_antiga, tipo_conector_antigo, usuario_id_antigo)
         VALUES ('DELETE', USER, :OLD.veiculo_id, :OLD.marca, :OLD.modelo, :OLD.ano, :OLD.autonomia, :OLD.tipo_conector, :OLD.usuario_id);
     END IF;
@@ -308,13 +308,13 @@ CREATE OR REPLACE TRIGGER trg_posto_carregamento
 AFTER INSERT OR UPDATE OR DELETE ON GS_POSTO_CARREGAMENTO
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_POSTO_CARREGAMENTO (operacao, usuario, posto_id, nome_novo, latitude_nova, longitude_nova, endereco_novo, horario_funcionamento_novo, formas_pagamento_novas, avaliacao_media_nova)
         VALUES ('INSERT', USER, :NEW.posto_id, :NEW.nome, :NEW.latitude, :NEW.longitude, :NEW.endereco, :NEW.horario_funcionamento, :NEW.formas_pagamento, :NEW.avaliacao_media);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_POSTO_CARREGAMENTO (operacao, usuario, posto_id, nome_antigo, nome_novo, latitude_antiga, latitude_nova, longitude_antiga, longitude_nova, endereco_antigo, endereco_novo, horario_funcionamento_antigo, horario_funcionamento_novo, formas_pagamento_antigas, formas_pagamento_novas, avaliacao_media_antiga, avaliacao_media_nova)
         VALUES ('UPDATE', USER, :OLD.posto_id, :OLD.nome, :NEW.nome, :OLD.latitude, :NEW.latitude, :OLD.longitude, :NEW.longitude, :OLD.endereco, :NEW.endereco, :OLD.horario_funcionamento, :NEW.horario_funcionamento, :OLD.formas_pagamento, :NEW.formas_pagamento, :OLD.avaliacao_media, :NEW.avaliacao_media);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_POSTO_CARREGAMENTO (operacao, usuario, posto_id, nome_antigo, latitude_antiga, longitude_antiga, endereco_antigo, horario_funcionamento_antigo, formas_pagamento_antigas, avaliacao_media_antiga)
         VALUES ('DELETE', USER, :OLD.posto_id, :OLD.nome, :OLD.latitude, :OLD.longitude, :OLD.endereco, :OLD.horario_funcionamento, :OLD.formas_pagamento, :OLD.avaliacao_media);
     END IF;
@@ -325,13 +325,13 @@ CREATE OR REPLACE TRIGGER trg_avaliacao
 AFTER INSERT OR UPDATE OR DELETE ON GS_AVALIACAO
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_AVALIACAO (operacao, usuario, avaliacao_id, nota_nova, comentario_novo, data_avaliacao_nova, posto_id, usuario_id)
         VALUES ('INSERT', USER, :NEW.avaliacao_id,:NEW.nota, :NEW.comentario, :NEW.data_avaliacao, :NEW.posto_id, :NEW.usuario_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_AVALIACAO (operacao, usuario, avaliacao_id, nota_antiga, nota_nova, comentario_antigo, comentario_novo, data_avaliacao_antiga, data_avaliacao_nova, posto_id, usuario_id)
         VALUES ('UPDATE', USER, :OLD.avaliacao_id, :OLD.nota, :NEW.nota, :OLD.comentario, :NEW.comentario, :OLD.data_avaliacao, :NEW.data_avaliacao, :NEW.posto_id, :NEW.usuario_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_AVALIACAO (operacao, usuario, avaliacao_id, nota_antiga, comentario_antigo, data_avaliacao_antiga, posto_id, usuario_id)
         VALUES ('DELETE', USER, :OLD.avaliacao_id, :OLD.nota, :OLD.comentario, :OLD.data_avaliacao, :OLD.posto_id, :OLD.usuario_id);
     END IF;
@@ -342,13 +342,13 @@ CREATE OR REPLACE TRIGGER trg_ponto_carregamento
 AFTER INSERT OR UPDATE OR DELETE ON GS_PONTO_CARREGAMENTO
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_PONTO_CARREGAMENTO (operacao, usuario, ponto_id, tipo_conector_novo, velocidade_carregamento_nova, disponibilidade_nova, reservavel_novo, posto_id_novo)
         VALUES ('INSERT', USER, :NEW.ponto_id, :NEW.tipo_conector, :NEW.velocidade_carregamento, :NEW.disponibilidade, :NEW.reservavel, :NEW.posto_id);         
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_PONTO_CARREGAMENTO (operacao, usuario, ponto_id, tipo_conector_antigo, tipo_conector_novo, velocidade_carregamento_antiga, velocidade_carregamento_nova, disponibilidade_antiga, disponibilidade_nova, reservavel_antigo, reservavel_novo,posto_id_antigo, posto_id_novo)
         VALUES ('UPDATE', USER, :OLD.ponto_id, :OLD.tipo_conector, :NEW.tipo_conector, :OLD.velocidade_carregamento, :NEW.velocidade_carregamento, :OLD.disponibilidade, :NEW.disponibilidade, :OLD.reservavel, :NEW.reservavel, :OLD.posto_id, :NEW.posto_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_PONTO_CARREGAMENTO (operacao, usuario, ponto_id, tipo_conector_antigo, velocidade_carregamento_antiga, disponibilidade_antiga, reservavel_antigo, posto_id_antigo)
         VALUES ('DELETE', USER, :OLD.ponto_id,:OLD.tipo_conector, :OLD.velocidade_carregamento,:OLD.disponibilidade, :OLD.reservavel, :OLD.posto_id);
     END IF;
@@ -359,13 +359,13 @@ CREATE OR REPLACE TRIGGER trg_reserva
 AFTER INSERT OR UPDATE OR DELETE ON GS_RESERVA
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_RESERVA (operacao, usuario, reserva_id, data_reserva_nova, status_novo, usuario_id_novo, ponto_id_novo)
         VALUES ('INSERT', USER, :NEW.reserva_id, :NEW.data_reserva, :NEW.status, :NEW.usuario_id, :NEW.ponto_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_RESERVA (operacao, usuario, reserva_id, data_reserva_antiga, data_reserva_nova, status_antigo, status_novo, usuario_id_antigo, usuario_id_novo, ponto_id_antigo, ponto_id_novo)
         VALUES ('UPDATE', USER, :OLD.reserva_id, :OLD.data_reserva, :NEW.data_reserva, :OLD.status, :NEW.status, :OLD.usuario_id, :NEW.usuario_id, :OLD.ponto_id, :NEW.ponto_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_RESERVA (operacao, usuario, reserva_id, data_reserva_antiga, status_antigo, usuario_id_antigo, ponto_id_antigo)
         VALUES ('DELETE', USER, :OLD.reserva_id, :OLD.data_reserva, :OLD.status, :OLD.usuario_id, :OLD.ponto_id);
     END IF;
@@ -376,13 +376,13 @@ CREATE OR REPLACE TRIGGER trg_historico_carregamento
 AFTER INSERT OR UPDATE OR DELETE ON GS_HISTORICO_CARREGAMENTO
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_HISTORICO_CARREGAMENTO (operacao, usuario, historico_id, data_carregamento_nova, energia_consumida_nova, emissoes_evitas_nova, usuario_id_novo, ponto_id_novo)
         VALUES ('INSERT', USER, :NEW.historico_id, :NEW.data_carregamento, :NEW.energia_consumida, :NEW.emissoes_evitas, :NEW.usuario_id, :NEW.ponto_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_HISTORICO_CARREGAMENTO (operacao, usuario, historico_id, data_carregamento_antiga, data_carregamento_nova, energia_consumida_antiga, energia_consumida_nova, emissoes_evitas_antiga, emissoes_evitas_nova, usuario_id_antigo, usuario_id_novo, ponto_id_antigo, ponto_id_novo)
         VALUES ('UPDATE', USER, :OLD.historico_id, :OLD.data_carregamento, :NEW.data_carregamento, :OLD.energia_consumida, :NEW.energia_consumida, :OLD.emissoes_evitas, :NEW.emissoes_evitas, :OLD.usuario_id, :NEW.usuario_id, :OLD.ponto_id, :NEW.ponto_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_HISTORICO_CARREGAMENTO (operacao, usuario, historico_id, data_carregamento_antiga, energia_consumida_antiga, emissoes_evitas_antiga, usuario_id_antigo, ponto_id_antigo)
         VALUES ('DELETE', USER, :OLD.historico_id, :OLD.data_carregamento, :OLD.energia_consumida, :OLD.emissoes_evitas, :OLD.usuario_id, :OLD.ponto_id);
     END IF;
@@ -393,13 +393,13 @@ CREATE OR REPLACE TRIGGER trg_viagem
 AFTER INSERT OR UPDATE OR DELETE ON GS_VIAGEM
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_VIAGEM ( operacao, usuario, viagem_id, origem_nova, destino_novo, autonomia_restante_nova, data_criacao_nova, usuario_id_novo)
         VALUES ('INSERT', USER, :NEW.viagem_id, :NEW.origem, :NEW.destino, :NEW.autonomia_restante, :NEW.data_criacao, :NEW.usuario_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_VIAGEM ( operacao, usuario, viagem_id, origem_antiga, origem_nova, destino_antigo, destino_novo, autonomia_restante_antiga, autonomia_restante_nova, data_criacao_antiga, data_criacao_nova, usuario_id_antigo, usuario_id_novo)
         VALUES ('UPDATE', USER, :OLD.viagem_id, :OLD.origem, :NEW.origem, :OLD.destino, :NEW.destino, :OLD.autonomia_restante, :NEW.autonomia_restante, :OLD.data_criacao, :NEW.data_criacao, :OLD.usuario_id, :NEW.usuario_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_VIAGEM (operacao, usuario, viagem_id, origem_antiga, destino_antigo, autonomia_restante_antiga, data_criacao_antiga, usuario_id_antigo)
         VALUES ('DELETE', USER, :OLD.viagem_id, :OLD.origem, :OLD.destino, :OLD.autonomia_restante, :OLD.data_criacao, :OLD.usuario_id);
     END IF;
@@ -410,46 +410,46 @@ CREATE OR REPLACE TRIGGER trg_ponto_parada
 AFTER INSERT OR UPDATE OR DELETE ON GS_PONTO_PARADA
 FOR EACH ROW
 BEGIN
-    IF INSERTING THEN
+    IF inserting THEN
         INSERT INTO AUDITORIA_PONTO_PARADA ( operacao, usuario, ponto_parada_id, ordem_nova, viagem_id_novo, ponto_id_novo)
         VALUES ('INSERT', USER, :NEW.ponto_parada_id, :NEW.ordem, :NEW.viagem_id, :NEW.ponto_id);
-    ELSIF UPDATING THEN
+    ELSIF updating THEN
         INSERT INTO AUDITORIA_PONTO_PARADA (operacao, usuario, ponto_parada_id, ordem_antiga, ordem_nova, viagem_id_antigo, viagem_id_novo, ponto_id_antigo, ponto_id_novo)
         VALUES ('UPDATE', USER, :OLD.ponto_parada_id, :OLD.ordem, :NEW.ordem, :OLD.viagem_id, :NEW.viagem_id, :OLD.ponto_id, :NEW.ponto_id);
-    ELSIF DELETING THEN
+    ELSIF deleting THEN
         INSERT INTO AUDITORIA_PONTO_PARADA ( operacao, usuario, ponto_parada_id, ordem_antiga, viagem_id_antigo, ponto_id_antigo)
         VALUES ('DELETE', USER, :OLD.ponto_parada_id, :OLD.ordem, :OLD.viagem_id, :OLD.ponto_id);
     END IF;
 END;
 /
 
-CREATE OR REPLACE PACKAGE PKG_GS_SISTEMA AS ---FINALIZADO
-    PROCEDURE INSERIR_USUARIO(
-        V_USUARIO_ID IN GS_USUARIO.USUARIO_ID%TYPE,
-        V_NOME IN GS_USUARIO.NOME%TYPE,
-        V_EMAIL IN GS_USUARIO.EMAIL%TYPE,
-        V_SENHA IN GS_USUARIO.SENHA%TYPE,
-        V_IMG_PERFIL IN GS_USUARIO.IMG_PERFIL%TYPE,
-        V_ULTIMA_LOCALIZACAO IN GS_USUARIO.ULTIMA_LOCALIZACAO%TYPE);
+CREATE OR REPLACE PACKAGE pkg_gs_sistema AS 
+    PROCEDURE inserir_usuario(
+        v_usuario_id IN GS_USUARIO.usuario_id%TYPE,
+        v_nome IN GS_USUARIO.nome%TYPE,
+        v_email IN GS_USUARIO.email%TYPE,
+        v_senha IN GS_USUARIO.senha%TYPE,
+        v_img_perfil IN GS_USUARIO.img_perfil%TYPE,
+        v_ultima_localizacao IN GS_USUARIO.ultima_localizacao%TYPE);
 
-    PROCEDURE INSERIR_VEICULO(
-        V_VEICULO_ID IN GS_VEICULO.VEICULO_ID%TYPE,
-        V_MARCA IN GS_VEICULO.MARCA%TYPE,
-        V_MODELO IN GS_VEICULO.MODELO%TYPE,
-        V_ANO IN GS_VEICULO.ANO%TYPE,
-        V_AUTONOMIA IN GS_VEICULO.AUTONOMIA%TYPE,
-        V_TIPO_CONECTOR IN GS_VEICULO.TIPO_CONECTOR%TYPE,
-        V_USUARIO_ID IN GS_USUARIO.USUARIO_ID%TYPE);
+    PROCEDURE inserir_veiculo(
+        v_veiculo_id IN GS_VEICULO.veiculo_id%TYPE,
+        v_marca IN GS_VEICULO.marca%TYPE,
+        v_modelo IN GS_VEICULO.modelo%TYPE,
+        v_ano IN GS_VEICULO.ano%TYPE,
+        v_autonomia IN GS_VEICULO.autonomia%TYPE,
+        v_tipo_conector IN GS_VEICULO.tipo_conector%TYPE,
+        v_usuario_id IN GS_USUARIO.usuario_id%TYPE);
 
-    PROCEDURE INSERIR_POSTO_CARREGAMENTO(
-        V_POSTO_ID IN GS_POSTO_CARREGAMENTO.POSTO_ID%TYPE,
-        V_NOME IN GS_POSTO_CARREGAMENTO.NOME%TYPE,
-        V_LATITUDE IN GS_POSTO_CARREGAMENTO.LATITUDE%TYPE,
-        V_LONGITUDE IN GS_POSTO_CARREGAMENTO.LONGITUDE%TYPE,
-        V_ENDERECO IN GS_POSTO_CARREGAMENTO.ENDERECO%TYPE,
-        V_HORARIO_FUNCIONAMENTO IN GS_POSTO_CARREGAMENTO.HORARIO_FUNCIONAMENTO%TYPE,
-        V_FORMAS_PAGAMENTO IN GS_POSTO_CARREGAMENTO.FORMAS_PAGAMENTO%TYPE,
-        V_AVALIACAO_MEDIA IN GS_POSTO_CARREGAMENTO.AVALIACAO_MEDIA%TYPE);
+    PROCEDURE inserir_posto_carregamento(
+        v_posto_id IN GS_POSTO_CARREGAMENTO.posto_id%TYPE,
+        v_nome IN GS_POSTO_CARREGAMENTO.nome%TYPE,
+        v_latitude IN GS_POSTO_CARREGAMENTO.latitude%TYPE,
+        v_longitude IN GS_POSTO_CARREGAMENTO.longitude%TYPE,
+        v_endereco IN GS_POSTO_CARREGAMENTO.endereco%TYPE,
+        v_horario_funcionamento IN GS_POSTO_CARREGAMENTO.horario_funcionamento%TYPE,
+        v_formas_pagamento IN GS_POSTO_CARREGAMENTO.formas_pagamento%TYPE,
+        v_avaliacao_media IN GS_POSTO_CARREGAMENTO.avaliacao_media%TYPE);
     
     PROCEDURE inserir_avaliacao(
         v_avaliacao_id IN GS_AVALIACAO.avaliacao_id%TYPE,
@@ -516,47 +516,47 @@ END PKG_GS_SISTEMA;
 SET SERVEROUTPUT ON;
 
 
-CREATE OR REPLACE PACKAGE BODY PKG_GS_SISTEMA AS --FINALIZADO
-    PROCEDURE INSERIR_USUARIO(
-        V_USUARIO_ID IN GS_USUARIO.USUARIO_ID%TYPE,
-        V_NOME IN GS_USUARIO.NOME%TYPE,
-        V_EMAIL IN GS_USUARIO.EMAIL%TYPE,
-        V_SENHA IN GS_USUARIO.SENHA%TYPE,
-        V_IMG_PERFIL IN GS_USUARIO.IMG_PERFIL%TYPE,
-        V_ULTIMA_LOCALIZACAO IN GS_USUARIO.ULTIMA_LOCALIZACAO%TYPE
+CREATE OR REPLACE PACKAGE BODY pkg_gs_sistema AS
+    PROCEDURE inserir_usuario(
+        v_usuario_id IN GS_USUARIO.usuario_id%TYPE,
+        v_nome IN GS_USUARIO.nome%TYPE,
+        v_email IN GS_USUARIO.email%TYPE,
+        v_senha IN GS_USUARIO.senha%TYPE,
+        v_img_perfil IN GS_USUARIO.img_perfil%TYPE,
+        v_ultima_localizacao IN GS_USUARIO.ultima_localizacao%TYPE
     ) IS
     BEGIN
-        INSERT INTO GS_USUARIO (USUARIO_ID, NOME, EMAIL, SENHA, IMG_PERFIL, DATA_CRIACAO, ULTIMA_LOCALIZACAO)
-        VALUES (V_USUARIO_ID, V_NOME, V_EMAIL, V_SENHA, V_IMG_PERFIL, SYSDATE, V_ULTIMA_LOCALIZACAO);
+        INSERT INTO GS_USUARIO (usuario_id, nome, email, senha, img_perfil, data_criacao, ultima_localizacao)
+        VALUES (v_usuario_id, v_nome, v_email, v_senha, v_img_perfil, SYSDATE, v_ultima_localizacao);
     END;
 
-    PROCEDURE INSERIR_VEICULO(
-        V_VEICULO_ID IN GS_VEICULO.VEICULO_ID%TYPE,
-        V_MARCA IN GS_VEICULO.MARCA%TYPE,
-        V_MODELO IN GS_VEICULO.MODELO%TYPE,
-        V_ANO IN GS_VEICULO.ANO%TYPE,
-        V_AUTONOMIA IN GS_VEICULO.AUTONOMIA%TYPE,
-        V_TIPO_CONECTOR IN GS_VEICULO.TIPO_CONECTOR%TYPE,
-        V_USUARIO_ID IN GS_USUARIO.USUARIO_ID%TYPE
+    PROCEDURE inserir_veiculo(
+        v_veiculo_id IN GS_VEICULO.veiculo_id%TYPE,
+        v_marca IN GS_VEICULO.marca%TYPE,
+        v_modelo IN GS_VEICULO.modelo%TYPE,
+        v_ano IN GS_VEICULO.ano%TYPE,
+        v_autonomia IN GS_VEICULO.autonomia%TYPE,
+        v_tipo_conector IN GS_VEICULO.tipo_conector%TYPE,
+        v_usuario_id IN GS_USUARIO.usuario_id%TYPE
     ) IS
     BEGIN
-        INSERT INTO GS_VEICULO (VEICULO_ID, MARCA, MODELO, ANO, AUTONOMIA, TIPO_CONECTOR, USUARIO_ID)
-        VALUES (V_VEICULO_ID, V_MARCA, V_MODELO, V_ANO, V_AUTONOMIA, V_TIPO_CONECTOR, V_USUARIO_ID);
+        INSERT INTO GS_VEICULO (veiculo_id, marca, modelo, ano, autonomia, tipo_conector, usuario_id)
+        VALUES (v_veiculo_id, v_marca, v_modelo, v_ano, v_autonomia, v_tipo_conector, v_usuario_id);
     END;
 
-    PROCEDURE INSERIR_POSTO_CARREGAMENTO(
-        V_POSTO_ID IN GS_POSTO_CARREGAMENTO.POSTO_ID%TYPE,
-        V_NOME IN GS_POSTO_CARREGAMENTO.NOME%TYPE,
-        V_LATITUDE IN GS_POSTO_CARREGAMENTO.LATITUDE%TYPE,
-        V_LONGITUDE IN GS_POSTO_CARREGAMENTO.LONGITUDE%TYPE,
-        V_ENDERECO IN GS_POSTO_CARREGAMENTO.ENDERECO%TYPE,
-        V_HORARIO_FUNCIONAMENTO IN GS_POSTO_CARREGAMENTO.HORARIO_FUNCIONAMENTO%TYPE,
-        V_FORMAS_PAGAMENTO IN GS_POSTO_CARREGAMENTO.FORMAS_PAGAMENTO%TYPE,
-        V_AVALIACAO_MEDIA IN GS_POSTO_CARREGAMENTO.AVALIACAO_MEDIA%TYPE
+    PROCEDURE inserir_posto_carregamento(
+        v_posto_id IN GS_POSTO_CARREGAMENTO.posto_id%TYPE,
+        v_nome IN GS_POSTO_CARREGAMENTO.nome%TYPE,
+        v_latitude IN GS_POSTO_CARREGAMENTO.latitude%TYPE,
+        v_longitude IN GS_POSTO_CARREGAMENTO.longitude%TYPE,
+        v_endereco IN GS_POSTO_CARREGAMENTO.endereco%TYPE,
+        v_horario_funcionamento IN GS_POSTO_CARREGAMENTO.horario_funcionamento%TYPE,
+        v_formas_pagamento IN GS_POSTO_CARREGAMENTO.formas_pagamento%TYPE,
+        v_avaliacao_media IN GS_POSTO_CARREGAMENTO.avaliacao_media%TYPE
     ) IS
     BEGIN
-        INSERT INTO GS_POSTO_CARREGAMENTO (POSTO_ID, NOME, LATITUDE, LONGITUDE, ENDERECO, HORARIO_FUNCIONAMENTO, FORMAS_PAGAMENTO, AVALIACAO_MEDIA)
-        VALUES (V_POSTO_ID, V_NOME, V_LATITUDE, V_LONGITUDE, V_ENDERECO, V_HORARIO_FUNCIONAMENTO, V_FORMAS_PAGAMENTO, V_AVALIACAO_MEDIA);
+        INSERT INTO GS_POSTO_CARREGAMENTO (posto_id, nome, latitude, longitude, endereco, horario_funcionamento, formas_pagamento, avaliacao_media)
+        VALUES (v_posto_id, v_nome, v_latitude, v_longitude, v_endereco, v_horario_funcionamento, v_formas_pagamento, v_avaliacao_media);
     END;
     
     PROCEDURE inserir_avaliacao(
@@ -635,13 +635,13 @@ CREATE OR REPLACE PACKAGE BODY PKG_GS_SISTEMA AS --FINALIZADO
     BEGIN
         SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
-                        'usuario_id' VALUE USUARIO_ID,
-                        'nome' VALUE NOME,
-                        'email' VALUE EMAIL,
-                        'senha' VALUE SENHA,
-                        'img_perfil' VALUE IMG_PERFIL,
-                        'data_criacao' VALUE TO_CHAR(DATA_CRIACAO, 'YYYY-MM-DD'),
-                        'ultima_localizacao' VALUE ULTIMA_LOCALIZACAO))
+                        'usuario_id' VALUE usuario_id,
+                        'nome' VALUE nome,
+                        'email' VALUE email,
+                        'senha' VALUE senha,
+                        'img_perfil' VALUE img_perfil,
+                        'data_criacao' VALUE TO_CHAR(data_criacao, 'YYYY-MM-DD'),
+                        'ultima_localizacao' VALUE ultima_localizacao))
             INTO v_json_usuario
         FROM GS_USUARIO;
 
@@ -792,275 +792,275 @@ END PKG_GS_SISTEMA;
 /
 
     BEGIN
-        PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 1,
-            V_NOME => 'João Silva',
-            V_EMAIL => 'joao@gmail.com',
-            V_SENHA => 'senha123',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'São Paulo');
+        PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 1,
+            v_nome => 'João Silva',
+            v_email => 'joao@gmail.com',
+            v_senha => 'senha123',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'São Paulo');
     
-        PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 2,
-            V_NOME => 'Maria Oliveira',
-            V_EMAIL => 'maria@gmail.com',
-            V_SENHA => 'senha456',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Rio de Janeiro');
+        PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 2,
+            v_nome => 'Maria Oliveira',
+            v_email => 'maria@gmail.com',
+            v_senha => 'senha456',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Rio de Janeiro');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 3,
-            V_NOME => 'Carlos Santos',
-            V_EMAIL => 'carlos@gmail.com',
-            V_SENHA => 'senha789',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Curitiba');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 3,
+            v_nome => 'Carlos Santos',
+            v_email => 'carlos@gmail.com',
+            v_senha => 'senha789',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Curitiba');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 4,
-            V_NOME => 'Ana Costa',
-            V_EMAIL => 'ana@gmail.com',
-            V_SENHA => 'senha101',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Belo Horizonte');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 4,
+            v_nome => 'Ana Costa',
+            v_email => 'ana@gmail.com',
+            v_senha => 'senha101',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Belo Horizonte');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 5,
-            V_NOME => 'Paulo Almeida',
-            V_EMAIL => 'paulo@gmail.com',
-            V_SENHA => 'senha202',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Brasília');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 5,
+            v_nome => 'Paulo Almeida',
+            v_email => 'paulo@gmail.com',
+            v_senha => 'senha202',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Brasília');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 6,
-            V_NOME => 'Fernanda Rocha',
-            V_EMAIL => 'fernanda@gmail.com',
-            V_SENHA => 'senha303',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Porto Alegre');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 6,
+            v_nome => 'Fernanda Rocha',
+            v_email => 'fernanda@gmail.com',
+            v_senha => 'senha303',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Porto Alegre');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 7,
-            V_NOME => 'Ricardo Lima',
-            V_EMAIL => 'ricardo@gmail.com',
-            V_SENHA => 'senha404',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Fortaleza');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 7,
+            v_nome => 'Ricardo Lima',
+            v_email => 'ricardo@gmail.com',
+            v_senha => 'senha404',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Fortaleza');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 8,
-            V_NOME => 'Luciana Mendes',
-            V_EMAIL => 'luciana@gmail.com',
-            V_SENHA => 'senha505',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Salvador');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 8,
+            v_nome => 'Luciana Mendes',
+            v_email => 'luciana@gmail.com',
+            v_senha => 'senha505',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Salvador');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 9,
-            V_NOME => 'Gabriel Souza',
-            V_EMAIL => 'gabriel@gmail.com',
-            V_SENHA => 'senha606',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Recife');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 9,
+            v_nome => 'Gabriel Souza',
+            v_email => 'gabriel@gmail.com',
+            v_senha => 'senha606',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Recife');
         
-            PKG_GS_SISTEMA.INSERIR_USUARIO(
-            V_USUARIO_ID => 10,
-            V_NOME => 'Juliana Farias',
-            V_EMAIL => 'juliana@gmail.com',
-            V_SENHA => 'senha707',
-            V_IMG_PERFIL => NULL,
-            V_ULTIMA_LOCALIZACAO => 'Manaus');
+            PKG_GS_SISTEMA.inserir_usuario(
+            v_usuario_id => 10,
+            v_nome => 'Juliana Farias',
+            v_email => 'juliana@gmail.com',
+            v_senha => 'senha707',
+            v_img_perfil => NULL,
+            v_ultima_localizacao => 'Manaus');
     
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 1,
-            V_MARCA => 'Tesla',
-            V_MODELO => 'Model 3',
-            V_ANO => 2022,
-            V_AUTONOMIA => 400,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 1);
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 1,
+            v_marca => 'Tesla',
+            v_modelo => 'Model 3',
+            v_ano => 2022,
+            v_autonomia => 400,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 1);
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 2,
-            V_MARCA => 'Chevrolet',
-            V_MODELO => 'Bolt',
-            V_ANO => 2021,
-            V_AUTONOMIA => 380,
-            V_TIPO_CONECTOR => 'CCS',
-            V_USUARIO_ID => 2);
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 2,
+            v_marca => 'Chevrolet',
+            v_modelo => 'Bolt',
+            v_ano => 2021,
+            v_autonomia => 380,
+            v_tipo_conector => 'CCS',
+            v_usuario_id => 2);
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 3,
-            V_MARCA => 'Nissan',
-            V_MODELO => 'Leaf',
-            V_ANO => 2023,
-            V_AUTONOMIA => 350,
-            V_TIPO_CONECTOR => 'CHAdeMO',
-            V_USUARIO_ID => 3);
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 3,
+            v_marca => 'Nissan',
+            v_modelo => 'Leaf',
+            v_ano => 2023,
+            v_autonomia => 350,
+            v_tipo_conector => 'CHAdeMO',
+            v_usuario_id => 3);
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 4,
-            V_MARCA => 'BMW',
-            V_MODELO => 'i3',
-            V_ANO => 2020,
-            V_AUTONOMIA => 320,
-            V_TIPO_CONECTOR => 'CCS',
-            V_USUARIO_ID => 4);
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 4,
+            v_marca => 'BMW',
+            v_modelo => 'i3',
+            v_ano => 2020,
+            v_autonomia => 320,
+            v_tipo_conector => 'CCS',
+            v_usuario_id => 4);
      
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 5,
-            V_MARCA => 'Volkswagen',
-            V_MODELO => 'ID.4',
-            V_ANO => 2022,
-            V_AUTONOMIA => 450,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 5); 
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 5,
+            v_marca => 'Volkswagen',
+            v_modelo => 'ID.4',
+            v_ano => 2022,
+            v_autonomia => 450,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 5); 
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 6,
-            V_MARCA => 'Hyundai',
-            V_MODELO => 'Kona',
-            V_ANO => 2021,
-            V_AUTONOMIA => 400,
-            V_TIPO_CONECTOR => 'CCS',
-            V_USUARIO_ID => 6); 
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 6,
+            v_marca => 'Hyundai',
+            v_modelo => 'Kona',
+            v_ano => 2021,
+            v_autonomia => 400,
+            v_tipo_conector => 'CCS',
+            v_usuario_id => 6); 
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 7,
-            V_MARCA => 'Kia',
-            V_MODELO => 'EV6',
-            V_ANO => 2023,
-            V_AUTONOMIA => 480,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 7); 
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 7,
+            v_marca => 'Kia',
+            v_modelo => 'EV6',
+            v_ano => 2023,
+            v_autonomia => 480,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 7); 
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 8,
-            V_MARCA => 'Audi',
-            V_MODELO => 'e-Tron',
-            V_ANO => 2020,
-            V_AUTONOMIA => 370,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 8); 
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 8,
+            v_marca => 'Audi',
+            v_modelo => 'e-Tron',
+            v_ano => 2020,
+            v_autonomia => 370,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 8); 
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 9,
-            V_MARCA => 'Ford',
-            V_MODELO => 'Mustang Mach-E',
-            V_ANO => 2022,
-            V_AUTONOMIA => 500,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 9);
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 9,
+            v_marca => 'Ford',
+            v_modelo => 'Mustang Mach-E',
+            v_ano => 2022,
+            v_autonomia => 500,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 9);
             
-            PKG_GS_SISTEMA.INSERIR_VEICULO(
-            V_VEICULO_ID => 10,
-            V_MARCA => 'Renault',
-            V_MODELO => 'Zoe',
-            V_ANO => 2021,
-            V_AUTONOMIA => 300,
-            V_TIPO_CONECTOR => 'Tipo 2',
-            V_USUARIO_ID => 10); 
+            PKG_GS_SISTEMA.inserir_veiculo(
+            v_veiculo_id => 10,
+            v_marca => 'Renault',
+            v_modelo => 'Zoe',
+            v_ano => 2021,
+            v_autonomia => 300,
+            v_tipo_conector => 'Tipo 2',
+            v_usuario_id => 10); 
     
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 1,
-            V_NOME => 'Posto Centro',
-            V_LATITUDE => TO_NUMBER('-23.550520', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-46.633308', '999.999999'),
-            V_ENDERECO => 'Avenida Paulista, 100',
-            V_HORARIO_FUNCIONAMENTO => '24h',
-            V_FORMAS_PAGAMENTO => 'Cartao, Dinheiro',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.50', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 1,
+            v_nome => 'Posto Centro',
+            v_latitude => TO_NUMBER('-23.550520', '999.999999'),
+            v_longitude => TO_NUMBER('-46.633308', '999.999999'),
+            v_endereco => 'Avenida Paulista, 100',
+            v_horario_funcionamento => '24h',
+            v_formas_pagamento => 'Cartao, Dinheiro',
+            v_avaliacao_media => TO_NUMBER('4.50', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 2,
-            V_NOME => 'Posto Norte',
-            V_LATITUDE => TO_NUMBER('-3.717220', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-38.543300', '999.999999'),
-            V_ENDERECO => 'Rua Norte, 200',
-            V_HORARIO_FUNCIONAMENTO => '6h às 22h',
-            V_FORMAS_PAGAMENTO => 'Cartao, PIX',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.20', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 2,
+            v_nome => 'Posto Norte',
+            v_latitude => TO_NUMBER('-3.717220', '999.999999'),
+            v_longitude => TO_NUMBER('-38.543300', '999.999999'),
+            v_endereco => 'Rua Norte, 200',
+            v_horario_funcionamento => '6h às 22h',
+            v_formas_pagamento => 'Cartao, PIX',
+            v_avaliacao_media => TO_NUMBER('4.20', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 3,
-            V_NOME => 'Posto Sul',
-            V_LATITUDE => TO_NUMBER('-22.903539', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-43.209587', '999.999999'),
-            V_ENDERECO => 'Praça Sul, 300',
-            V_HORARIO_FUNCIONAMENTO => '7h às 21h',
-            V_FORMAS_PAGAMENTO => 'Dinheiro',
-            V_AVALIACAO_MEDIA => TO_NUMBER('3.80', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 3,
+            v_nome => 'Posto Sul',
+            v_latitude => TO_NUMBER('-22.903539', '999.999999'),
+            v_longitude => TO_NUMBER('-43.209587', '999.999999'),
+            v_endereco => 'Praça Sul, 300',
+            v_horario_funcionamento => '7h às 21h',
+            v_formas_pagamento => 'Dinheiro',
+            v_avaliacao_media => TO_NUMBER('3.80', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 4,
-            V_NOME => 'Posto Leste',
-            V_LATITUDE => TO_NUMBER('-30.033056', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-51.230000', '999.999999'),
-            V_ENDERECO => 'Av. Leste, 400',
-            V_HORARIO_FUNCIONAMENTO => '24h',
-            V_FORMAS_PAGAMENTO => 'PIX',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.00', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 4,
+            v_nome => 'Posto Leste',
+            v_latitude => TO_NUMBER('-30.033056', '999.999999'),
+            v_longitude => TO_NUMBER('-51.230000', '999.999999'),
+            v_endereco => 'Av. Leste, 400',
+            v_horario_funcionamento => '24h',
+            v_formas_pagamento => 'PIX',
+            v_avaliacao_media => TO_NUMBER('4.00', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 5,
-            V_NOME => 'Posto Oeste',
-            V_LATITUDE => TO_NUMBER('-15.826691', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-47.921820', '999.999999'),
-            V_ENDERECO => 'Av. Oeste, 500',
-            V_HORARIO_FUNCIONAMENTO => '5h às 23h',
-            V_FORMAS_PAGAMENTO => 'Cartao',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.70', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 5,
+            v_nome => 'Posto Oeste',
+            v_latitude => TO_NUMBER('-15.826691', '999.999999'),
+            v_longitude => TO_NUMBER('-47.921820', '999.999999'),
+            v_endereco => 'Av. Oeste, 500',
+            v_horario_funcionamento => '5h às 23h',
+            v_formas_pagamento => 'Cartao',
+            v_avaliacao_media => TO_NUMBER('4.70', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 6,
-            V_NOME => 'Posto Alpha',
-            V_LATITUDE => TO_NUMBER('-19.815700', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-43.954200', '999.999999'),
-            V_ENDERECO => 'Rua Alpha, 600',
-            V_HORARIO_FUNCIONAMENTO => '6h às 18h',
-            V_FORMAS_PAGAMENTO => 'Cartao, PIX',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.40', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 6,
+            v_nome => 'Posto Alpha',
+            v_latitude => TO_NUMBER('-19.815700', '999.999999'),
+            v_longitude => TO_NUMBER('-43.954200', '999.999999'),
+            v_endereco => 'Rua Alpha, 600',
+            v_horario_funcionamento => '6h às 18h',
+            v_formas_pagamento => 'Cartao, PIX',
+            v_avaliacao_media => TO_NUMBER('4.40', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 7,
-            V_NOME => 'Posto Beta',
-            V_LATITUDE => TO_NUMBER('-8.047600', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-34.877000', '999.999999'),
-            V_ENDERECO => 'Rua Alpha, 600',
-            V_HORARIO_FUNCIONAMENTO => '6h às 18h',
-            V_FORMAS_PAGAMENTO => 'Cartao, PIX',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.40', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 7,
+            v_nome => 'Posto Beta',
+            v_latitude => TO_NUMBER('-8.047600', '999.999999'),
+            v_longitude => TO_NUMBER('-34.877000', '999.999999'),
+            v_endereco => 'Rua Alpha, 600',
+            v_horario_funcionamento => '6h às 18h',
+            v_formas_pagamento => 'Cartao, PIX',
+            v_avaliacao_media => TO_NUMBER('4.40', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 8,
-            V_NOME => 'Posto Gama',
-            V_LATITUDE => TO_NUMBER('-12.971400', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-38.501400', '999.999999'),
-            V_ENDERECO => 'Rua Gama, 800',
-            V_HORARIO_FUNCIONAMENTO => '6h às 22h',
-            V_FORMAS_PAGAMENTO => 'PIX',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.30', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 8,
+            v_nome => 'Posto Gama',
+            v_latitude => TO_NUMBER('-12.971400', '999.999999'),
+            v_longitude => TO_NUMBER('-38.501400', '999.999999'),
+            v_endereco => 'Rua Gama, 800',
+            v_horario_funcionamento => '6h às 22h',
+            v_formas_pagamento => 'PIX',
+            v_avaliacao_media => TO_NUMBER('4.30', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 9,
-            V_NOME => 'Posto Delta',
-            V_LATITUDE => TO_NUMBER('-1.455800', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-48.490200', '999.999999'),
-            V_ENDERECO => 'Av. Delta, 900',
-            V_HORARIO_FUNCIONAMENTO => '7h às 19h',
-            V_FORMAS_PAGAMENTO => 'Cartao',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.60', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 9,
+            v_nome => 'Posto Delta',
+            v_latitude => TO_NUMBER('-1.455800', '999.999999'),
+            v_longitude => TO_NUMBER('-48.490200', '999.999999'),
+            v_endereco => 'Av. Delta, 900',
+            v_horario_funcionamento => '7h às 19h',
+            v_formas_pagamento => 'Cartao',
+            v_avaliacao_media => TO_NUMBER('4.60', '999.99'));
             
-            PKG_GS_SISTEMA.INSERIR_POSTO_CARREGAMENTO(
-            V_POSTO_ID => 10,
-            V_NOME => 'Posto Epsilon',
-            V_LATITUDE => TO_NUMBER('-3.118700', '999.999999'),
-            V_LONGITUDE => TO_NUMBER('-60.021000', '999.999999'),
-            V_ENDERECO => 'Rua Epsilon, 1000',
-            V_HORARIO_FUNCIONAMENTO => '24h',
-            V_FORMAS_PAGAMENTO => 'Cartao, Dinheiro',
-            V_AVALIACAO_MEDIA => TO_NUMBER('4.80', '999.99'));
+            PKG_GS_SISTEMA.inserir_posto_carregamento(
+            v_posto_id => 10,
+            v_nome => 'Posto Epsilon',
+            v_latitude => TO_NUMBER('-3.118700', '999.999999'),
+            v_longitude => TO_NUMBER('-60.021000', '999.999999'),
+            v_endereco => 'Rua Epsilon, 1000',
+            v_horario_funcionamento => '24h',
+            v_formas_pagamento => 'Cartao, Dinheiro',
+            v_avaliacao_media => TO_NUMBER('4.80', '999.99'));
     
             PKG_GS_SISTEMA.inserir_avaliacao(
             v_avaliacao_id => 1,
@@ -1506,9 +1506,6 @@ CREATE OR REPLACE PACKAGE BODY pkg_validar_email AS
 END pkg_validar_email;
 /
 
-SELECT pkg_validar_email.validar_email('usuario@dominio.com') FROM dual; 
-SELECT pkg_validar_email.validar_email('usuario@@dominio') FROM dual; 
-
 CREATE OR REPLACE PACKAGE pkg_func_media AS
     FUNCTION func_media(f_posto_id IN NUMBER) RETURN NUMBER;
 END pkg_func_media;
@@ -1528,5 +1525,84 @@ CREATE OR REPLACE PACKAGE BODY pkg_func_media AS
 END pkg_func_media;
 /
 
+
+----TESTANDO----
+
+
 SELECT pkg_func_media.func_media(1) FROM dual;
 SELECT pkg_func_media.func_media(99) FROM dual;
+
+SELECT pkg_validar_email.validar_email('usuario@dominio.com') FROM dual; 
+SELECT pkg_validar_email.validar_email('usuario@@dominio') FROM dual; 
+
+
+SELECT * FROM AUDITORIA_USUARIO;
+
+UPDATE GS_USUARIO SET nome = 'joao carlos'
+WHERE usuario_id = 1;
+
+SELECT * FROM AUDITORIA_USUARIO;
+
+
+SELECT * FROM AUDITORIA_VEICULO;
+
+UPDATE GS_VEICULO SET marca = 'Chevrolet'
+WHERE veiculo_id = 1;
+
+SELECT * FROM AUDITORIA_VEICULO;
+
+
+SELECT * FROM AUDITORIA_POSTO_CARREGAMENTO;
+
+UPDATE GS_POSTO_CARREGAMENTO SET nome = 'Posto do Marcel'
+WHERE posto_id = 1;
+
+SELECT * FROM AUDITORIA_POSTO_CARREGAMENTO;
+
+
+SELECT * FROM AUDITORIA_AVALIACAO;
+
+UPDATE GS_AVALIACAO SET comentario = 'Gostei bastante.'
+WHERE avaliacao_id = 1;
+
+SELECT * FROM AUDITORIA_AVALIACAO;
+
+
+SELECT * FROM AUDITORIA_PONTO_CARREGAMENTO;
+
+UPDATE GS_PONTO_CARREGAMENTO SET disponibilidade = 'Indisponível'
+WHERE ponto_id = 1;
+
+SELECT * FROM AUDITORIA_PONTO_CARREGAMENTO;
+
+
+SELECT * FROM AUDITORIA_RESERVA;
+
+UPDATE GS_RESERVA SET status = 'Cancelada'
+WHERE reserva_id = 1;
+
+SELECT * FROM AUDITORIA_RESERVA;
+
+
+SELECT * FROM AUDITORIA_HISTORICO_CARREGAMENTO;
+
+UPDATE GS_HISTORICO_CARREGAMENTO SET emissoes_evitas = TO_NUMBER('1.5', '99.9')
+WHERE historico_id = 1;
+
+SELECT * FROM AUDITORIA_HISTORICO_CARREGAMENTO;
+
+
+SELECT * FROM AUDITORIA_VIAGEM;
+
+UPDATE GS_VIAGEM SET origem = 'Osasco'
+WHERE viagem_id = 1;
+
+SELECT * FROM AUDITORIA_VIAGEM;
+
+
+SELECT * FROM AUDITORIA_PONTO_PARADA;
+
+UPDATE GS_PONTO_PARADA SET ordem = 2
+WHERE ponto_parada_id = 1;
+
+SELECT * FROM AUDITORIA_PONTO_PARADA;
