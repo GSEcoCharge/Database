@@ -19,9 +19,9 @@ DROP TABLE AUDITORIA_PONTO_PARADA CASCADE CONSTRAINTS;
 
 CREATE TABLE GS_USUARIO(
     usuario_id INT PRIMARY KEY,
-    nome VARCHAR(100),
-    email VARCHAR(100),
-    senha VARCHAR(100),
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    senha VARCHAR(100) NOT NULL,
     img_perfil BLOB,
     data_criacao DATE,
     ultima_localizacao VARCHAR(50)
@@ -29,8 +29,8 @@ CREATE TABLE GS_USUARIO(
 
 CREATE TABLE GS_VEICULO(
     veiculo_id INT PRIMARY KEY,
-    marca VARCHAR(50),
-    modelo VARCHAR(50),
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
     ano INT,
     autonomia INT,
     tipo_conector VARCHAR(50),
@@ -40,7 +40,7 @@ CREATE TABLE GS_VEICULO(
 
 CREATE TABLE GS_POSTO_CARREGAMENTO(
     posto_id INT PRIMARY KEY,
-    nome VARCHAR(100),
+    nome VARCHAR(100) NOT NULL,
     latitude DECIMAL(10,6),
     longitude DECIMAL(10,6),
     endereco VARCHAR(200),
